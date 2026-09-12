@@ -29,9 +29,13 @@ jobs:
 
       - name: Download Skia (Linux)
         run: |
-          # Using the stable m124-08a5439a6b release
-          wget https://github.com/aseprite/skia/releases/download/m124-08a5439a6b/Skia-Linux-Release-x64-libstdc++.zip
-          unzip Skia-Linux-Release-x64-libstdc++.zip -d skia
+          skia_url=$(source "$GITHUB_WORKSPACE/laf/misc/skia-url.sh" | xargs)
+          skia_file=$(basename "$skia_url")
+
+          echo "Downloading $skia_file"
+          curl -fL -o "$skia_file" "$skia_url"
+
+          unzip "$skia_file" -d skia
 
       - name: Compile Aseprite
         run: |
